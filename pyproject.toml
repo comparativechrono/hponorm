@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hponorm"
+version = "1.0.0"
+description = "Interactively validate and normalise GA4GH phenopacket phenotypic-feature terms against the HPO ontology"
+requires-python = ">=3.9"
+dependencies = []  # stdlib-only by default
+
+[project.optional-dependencies]
+recommended = ["rapidfuzz>=3.0", "rich>=13.0"]
+
+[project.scripts]
+hponorm = "hponorm.cli:main"
+
+[tool.setuptools]
+packages = ["hponorm"]
+
+[tool.setuptools.package-data]
+hponorm = ["data/*.obo"]

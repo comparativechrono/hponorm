@@ -1,0 +1,8 @@
+# hponorm runs on the Python standard library alone.
+# These two are OPTIONAL but recommended:
+#   - rapidfuzz: much faster and higher-quality fuzzy matching for the local
+#                HPO backend (falls back to stdlib difflib if absent).
+#   - rich:      nicer coloured tables in the interactive prompt
+#                (falls back to plain text if absent).
+rapidfuzz>=3.0
+rich>=13.0
