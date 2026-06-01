@@ -6,7 +6,7 @@ phenopacket / family JSON files against the **HPO** (Human Phenotype Ontology).
 It's the sibling of `mondonorm` (which does disease terms → MONDO) and shares the
 same look and feel. This one targets `phenotypicFeatures[].type` and HPO.
 
-Your generator currently emits phenotype terms with an empty `id` and a
+If your pedigree conversion currently emits phenotype terms with an empty `id` and a
 free-text label:
 
 ```json
