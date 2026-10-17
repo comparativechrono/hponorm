@@ -1,0 +1,3 @@
+include CHANGELOG.md
+recursive-include hponorm/data *.obo
+recursive-include tests *.py *.json *.obo

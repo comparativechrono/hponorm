@@ -32,10 +32,48 @@ Two interchangeable backends; pick with `--backend`:
 | `auto`  | OLS if reachable, otherwise local (the default) | preferred |
 
 The official ontology file can be fetched automatically (from
-`purl.obolibrary.org/obo/hp.obo`) or supplied with `--hpo-file`.
+`https://purl.obolibrary.org/obo/hp.obo`) or supplied with `--hpo-file`.
 A tiny **illustrative** offline sample (`hponorm/data/hpo-sample.obo`, 8 terms)
 ships with the package so you can try the tool with no network — it is **not** a
-substitute for the real ontology.
+substitute for the real ontology. In Python its path is `hponorm.SAMPLE_OBO`.
+
+If OLS does not answer (no connection, a time-out, or an error from EBI's
+server), hponorm says so, rather than showing "no suggestions" as if the name
+had no match. In `auto` mode, when a copy of the HPO is already on the
+computer, the suggestions then come from that copy, and hponorm says that too.
+
+## How suggestions are scored
+
+Both backends score a suggestion in the same way, from 0 to 100:
+
+* **100**: the name is the term's label, once case, accents, possessives and
+  punctuation are set aside ("long-QT interval" and "Long QT interval" are the
+  same name, as are "Down's syndrome" and "Down syndrome");
+* **98**: the name is one of the term's synonyms;
+* **97**: the same words in another order;
+* **96 or less**: otherwise, how closely the name matches the label or the
+  closest synonym. This is the mean of how alike they are letter by letter and
+  the share of their words they have in common, where a plural, a word with an
+  ending ("abnormal", "abnormality") or a close spelling of a longer word
+  ("anaemia", "anemia") counts as nearly the same word. So "learning
+  disability" puts *Specific learning disability* (80) before *Dyslexia*,
+  whose synonym "Reading disability" scores 68, and a name inside a longer one
+  is not taken for it: "hearing loss from birth" scores 74 against *Hearing
+  impairment*, whose synonym is "Hearing loss".
+
+OLS returns its results in its own order of relevance; hponorm scores each of
+them as above and shows the closest first. (Version 1.0 scored OLS's results
+by their place in that order, 100, 96, 92 and so on, so the first always looked
+like an exact match.) A threshold, such as the default of 0.9 (90 here) in
+[phenopacket-toolkit](https://pypi.org/project/phenopacket-toolkit/)'s
+`phenotk normalise`, therefore means the same whichever backend found the term.
+
+The local backend finds the names that share a word with the one searched for,
+or a word spelt nearly the same, and scores those: a fraction of a second per
+name for the whole HPO, with or without `rapidfuzz`. With `rapidfuzz`
+installed it also looks at names that are alike letter by letter but share no
+word (a name written as one word, say); a term found either way gets the same
+score.
 
 ## Install
 
@@ -44,8 +82,9 @@ pip install -e .                 # installs the `hponorm` command
 pip install -e ".[recommended]"  # + rapidfuzz (better matching) and rich (nicer UI)
 ```
 
-Both extras are optional: without `rapidfuzz` it falls back to stdlib `difflib`;
-without `rich` it prints plain text.
+Both extras are optional: without `rapidfuzz` the local search uses only its
+own word index and the standard library's `difflib`; without `rich` it prints
+plain text.
 
 ## Quick start
 
@@ -82,7 +121,8 @@ Select [#, s words, h HP:id, r, k, x, ?, q]:
 ```
 
 If a feature already has an `id`, it is validated: the tool reports whether the
-id resolves in HPO and whether its canonical label matches the existing label.
+id resolves in HPO and whether its canonical label matches the existing label
+(or, if OLS did not answer, that the id could not be checked).
 A feature's `excluded` flag (a negated phenotype) is preserved untouched — only
 `type.id` / `type.label` are changed.
 
@@ -113,6 +153,7 @@ Because `hponorm` only touches `phenotypicFeatures`, you can run it alongside
 --mapping FILE        load/save remembered label->term decisions across runs
 --auto-remembered     auto-apply remembered labels without prompting
 --no-color            plain text output
+--version             the version of hponorm
 ```
 
 Process several files in one go; remembered decisions carry across them:
@@ -123,6 +164,28 @@ hponorm *.json --mapping team-hpo-map.json
 hponorm new/*.json --mapping team-hpo-map.json --auto-remembered
 ```
 
+### The mapping file
+
+The mapping file is a JSON object of names and the terms chosen for them.
+hponorm writes each new entry as `"long qt interval": {"id": "HP:0001657",
+"label": "Prolonged QT interval"}`, and since version 1.1 it reads the names
+without regard to case, so you can write one by hand as you like:
+
+```json
+{
+  "Long QT interval": {"id": "HP:0001657", "label": "Prolonged QT interval"},
+  "Deafness": "HP:0000365",
+  "Breast cancer": "MONDO:0007254"
+}
+```
+
+An entry may give the id alone (hponorm then looks up its label), and entries
+for other ontologies are left as they are, so the same file can serve
+`mondonorm`, studio2ga4gh's `--terms` and `phenotk normalise --mapping`. A
+decision log from `phenotk normalise --log` (`{"resolved": {...}}`) can be
+read too. When hponorm saves its decisions, an entry already in the file keeps
+its own form; and a file it cannot read is left untouched.
+
 ## Use as a library
 
 ```python
@@ -131,7 +194,9 @@ from hponorm import phenopackets as pp
 
 sug = Suggester(OlsClient(), name="ols")          # or Suggester(HpoIndex.load(...))
 for c in sug.suggest("long qt interval", limit=5):
-    print(c.id, c.label, c.score)
+    print(c.id, c.label, c.score, c.matched_on)
+if sug.last_error:                                 # e.g. "EBI's Ontology Lookup Service did not answer in time"
+    print(sug.last_error)
 
 data = pp.load("myfile.json")
 for ref in pp.find_phenotypic_features(data):
@@ -141,7 +206,7 @@ for ref in pp.find_phenotypic_features(data):
 ## Getting the full HPO ontology
 
 * Browser / search: https://hpo.jax.org
-* Direct files: `http://purl.obolibrary.org/obo/hp.obo` or `.../hp.json`
+* Direct files: `https://purl.obolibrary.org/obo/hp.obo` or `.../hp.json`
 * Releases: https://github.com/obophenotype/human-phenotype-ontology/releases
 
 Phenopackets reference: https://phenopacket-schema.readthedocs.io
@@ -154,3 +219,19 @@ mellitus HP:0000819, Prolonged QT interval HP:0001657, Seizure HP:0001250,
 Microcephaly HP:0000252, Short stature HP:0004322, Global developmental delay
 HP:0001263). It is still only a tiny demo fixture — verify against the live HPO
 for real curation work.
+
+## Development
+
+```bash
+pip install -e ".[test]"
+pytest
+```
+
+The tests never go online: they use the bundled sample, a few terms copied
+from the HPO into `tests/data`, and a stand-in for OLS that answers with JSON
+written for the tests.
+
+## Licence
+
+MIT. The test ontology in `tests/data` is an excerpt of the HPO, used under the
+HPO's licence (https://hpo.jax.org/app/license).
