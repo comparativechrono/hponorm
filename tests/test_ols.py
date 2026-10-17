@@ -147,3 +147,12 @@ def test_resolve_without_an_answer():
     assert sug.resolve("HP:0000365") is None and "did not answer" in sug.last_error
     sug = Suggester(FakeOls({"/terms": {"_embedded": {"terms": []}}}), name="ols")
     assert sug.resolve("HP:9999999") is None and sug.last_error is None
+
+
+def test_an_opposite_term_from_ols_is_not_a_match():
+    """OLS may offer Maternal hyperthyroidism first for "Maternal hypothyroidism", the HPO having no such term."""
+    answer = {"response": {"numFound": 1, "start": 0, "docs": [
+        {"iri": "http://purl.obolibrary.org/obo/HP_0034778", "obo_id": "HP:0034778", "short_form": "HP_0034778",
+         "label": "Maternal hyperthyroidism", "ontology_name": "hp", "type": "class"}]}}
+    found = FakeOls({"/search": answer}).search("Maternal hypothyroidism", limit=5)
+    assert [c.id for c in found] == ["HP:0034778"] and found[0].score < 50

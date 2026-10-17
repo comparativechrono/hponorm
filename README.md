@@ -61,12 +61,32 @@ Both backends score a suggestion in the same way, from 0 to 100:
   is not taken for it: "hearing loss from birth" scores 74 against *Hearing
   impairment*, whose synonym is "Hearing loss".
 
+Names that are alike letter by letter but are not the same thing are scored
+by the words they share alone, so they never look like close spellings of each
+other:
+
+* words that differ by their prefixes: "hypertension" and "hypotension",
+  "microcephaly" and "macrocephaly", "bradycardia" and "tachycardia",
+  "polyhydramnios" and "oligohydramnios";
+* a word and the same word with a prefix added ("hypothyroidism",
+  "hypoparathyroidism") or a negating one ("symptomatic", "asymptomatic";
+  "syndromic", "nonsyndromic"; "normal", "abnormal");
+* names of different types or numbers: "type 1" and "type 2", "long QT
+  syndrome 1" and "2", "hepatitis A" and "B". "Type I" and "type 1" are the
+  same.
+
+So "Maternal hypothyroidism" scores 25 against *Maternal hyperthyroidism* (in
+1.0's local search it scored 93.6), and "Hypotension" 0 against *Hypertension*.
+British and American spellings are still the same name: "Oesophageal atresia"
+and "Esophageal atresia" score 96.
+
 OLS returns its results in its own order of relevance; hponorm scores each of
 them as above and shows the closest first. (Version 1.0 scored OLS's results
 by their place in that order, 100, 96, 92 and so on, so the first always looked
-like an exact match.) A threshold, such as the default of 0.9 (90 here) in
-[phenopacket-toolkit](https://pypi.org/project/phenopacket-toolkit/)'s
-`phenotk normalise`, therefore means the same whichever backend found the term.
+like an exact match.) A threshold therefore means the same whichever backend
+found the term. [phenopacket-toolkit](https://pypi.org/project/phenopacket-toolkit/)'s
+`phenotk normalise`, for one, by default accepts only 0.98 or more (98 here),
+which only the label or a synonym reaches.
 
 The local backend finds the names that share a word with the one searched for,
 or a word spelt nearly the same, and scores those: a fraction of a second per

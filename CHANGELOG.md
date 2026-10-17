@@ -22,6 +22,19 @@
   that are alike letter by letter; the scores are the same with or without it,
   and case, punctuation and possessives no longer lower them. An exact synonym
   now always scores 98, below the label's 100; 1.0 could give it 100.
+- **Names that look alike but are not the same thing no longer score like
+  close spellings.** Scoring by shared letters made opposites look alike: in
+  1.0's local search "Maternal hypothyroidism" scored 93.6 against *Maternal
+  hyperthyroidism*, so a tool that accepted matches of 90 or more filled in
+  one for the other. Words that differ by their prefixes (hyper- and hypo-,
+  micro- and macro-, brady- and tachy-, poly- and oligo-, and others), a word
+  with a prefix added ("hypoparathyroidism" for "hypothyroidism") or a
+  negating one ("asymptomatic", "nonsyndromic", "abnormal"), and names of
+  different types or numbers ("type 1" and "type 2"; "hepatitis A" and "B")
+  are now never close spellings of each other, and such names are scored by
+  the words they share alone. British and American spellings still match, and
+  a Roman numeral is its number ("type I", "type 1"). Each of these pairs is
+  in the tests.
 - **A failed request to OLS is reported.** The `Suggester` turned a failed
   request into "no suggestions", so an unreachable OLS looked like a name with
   no match. It still returns a list, but now records why in
