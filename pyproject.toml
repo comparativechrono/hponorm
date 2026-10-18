@@ -1,22 +1,45 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "hponorm"
-version = "1.0.0"
+version = "1.1.0"
 description = "Interactively validate and normalise GA4GH phenopacket phenotypic-feature terms against the HPO ontology"
+readme = "README.md"
 requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Tim Hearn", email = "tjh70@cam.ac.uk"},
+]
+keywords = ["HPO", "Human Phenotype Ontology", "phenopackets", "GA4GH", "ontology", "normalisation"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
 dependencies = []  # stdlib-only by default
 
 [project.optional-dependencies]
 recommended = ["rapidfuzz>=3.0", "rich>=13.0"]
+test = ["pytest>=7"]
 
 [project.scripts]
 hponorm = "hponorm.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/comparativechrono/hponorm"
+Issues = "https://github.com/comparativechrono/hponorm/issues"
+Changelog = "https://github.com/comparativechrono/hponorm/blob/main/CHANGELOG.md"
+
 [tool.setuptools]
-packages = ["hponorm"]
+packages = ["hponorm", "hponorm.data"]
 
 [tool.setuptools.package-data]
-hponorm = ["data/*.obo"]
+"hponorm.data" = ["*.obo"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

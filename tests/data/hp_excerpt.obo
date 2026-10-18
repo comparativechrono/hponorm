@@ -1,0 +1,125 @@
+format-version: 1.2
+data-version: hp/releases/2026-09-01
+ontology: hp
+remark: Twelve terms of the HPO for hponorm's tests, NOT the ontology. Their ids,
+remark: names, definitions and synonyms are copied unchanged from the HPO release
+remark: of 2026-09-01 (https://hpo.jax.org; licence https://hpo.jax.org/app/license);
+remark: other lines are left out, and terms they refer to are not included.
+
+[Term]
+id: HP:0001249
+name: Intellectual disability
+def: "The term intellectual disability or intellectual developmental disorder is used to describe significantly sub-average intellectual and adaptive functioning based on clinical assessment and as measured by individually administered, appropriately normed, standardized and validated tests of intellectual functioning and adaptive behavior, with onset during the developmental period from infancy through adolescence." [PMID:31292035, PMID:32206581, PMID:36975277]
+synonym: "Dull intelligence" RELATED []
+synonym: "Intellectual disability" EXACT layperson []
+synonym: "Low intelligence" RELATED layperson []
+synonym: "Mental deficiency" EXACT layperson []
+synonym: "Mental retardation" EXACT layperson []
+synonym: "Mental retardation, nonspecific" EXACT layperson []
+synonym: "Mental-retardation" EXACT layperson []
+synonym: "Nonprogressive intellectual disability" EXACT []
+synonym: "Nonprogressive mental retardation" EXACT []
+synonym: "Poor school performance" RELATED layperson []
+is_a: HP:0011446 ! Abnormality of mental function
+is_a: HP:0012759 ! Neurodevelopmental abnormality
+
+[Term]
+id: HP:0001328
+name: Specific learning disability
+def: "Impairment of certain skills such as reading or writing, coordination, self-control, or attention that interfere with the ability to learn. The impairment is not related to a global deficiency of intelligence." [https://orcid.org/0000-0002-0736-9199]
+is_a: HP:0012759 ! Neurodevelopmental abnormality
+
+[Term]
+id: HP:0010522
+name: Dyslexia
+def: "A learning disorder characterized primarily by difficulties in learning to read and spell. Dyslectic children also exhibit a tendency to read words from right to left and to confuse letters such as b and d whose orientation is important for their identification. Children with dyslexia appear to be impaired in phonemic skills (the ability to associate visual symbols with the sounds they represent)." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Reading disability" EXACT layperson []
+is_a: HP:0001328 ! Specific learning disability
+
+[Term]
+id: HP:0002442
+name: Dyscalculia
+def: "A specific learning disability involving mathematics and arithmetic." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Acalculia" EXACT []
+synonym: "Difficulty making arithmetical calculations" BROAD layperson [https://orcid.org/0000-0001-5208-3432]
+is_a: HP:0001328 ! Specific learning disability
+
+[Term]
+id: HP:0000365
+name: Hearing impairment
+def: "A decreased magnitude of the sensory perception of sound." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Deafness" EXACT layperson []
+synonym: "Hearing defect" EXACT layperson []
+synonym: "Hearing impairment" EXACT layperson []
+synonym: "Hearing loss" RELATED layperson []
+synonym: "Hypacusis" EXACT []
+synonym: "Hypoacusis" RELATED []
+is_a: HP:0000364 ! Hearing abnormality
+
+[Term]
+id: HP:0000407
+name: Sensorineural hearing impairment
+def: "A type of hearing impairment in one or both ears related to an abnormal functionality of the cochlear nerve." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Hearing loss, sensorineural" EXACT [https://orcid.org/0000-0002-5316-1399]
+synonym: "Sensorineural deafness" EXACT []
+synonym: "Sensorineural hearing loss" EXACT []
+is_a: HP:0000365 ! Hearing impairment
+is_a: HP:0011389 ! Functional abnormality of the inner ear
+
+[Term]
+id: HP:0034778
+name: Maternal hyperthyroidism
+def: "The mother of a fetus or index patient has a history of hyperthyroidism during the corresponding pregnancy." []
+is_a: HP:0002686 ! Pregnancy history
+
+[Term]
+id: HP:0000821
+name: Hypothyroidism
+def: "Deficiency of thyroid hormone." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Low T4" EXACT []
+synonym: "Underactive thyroid" EXACT layperson [https://orcid.org/0000-0001-5208-3432]
+is_a: HP:0002926 ! Abnormality of thyroid physiology
+
+[Term]
+id: HP:0000822
+name: Hypertension
+def: "The presence of chronic increased pressure in the systemic arterial system." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Arterial hypertension" EXACT []
+synonym: "High blood pressure" RELATED layperson [https://orcid.org/0000-0001-5208-3432]
+synonym: "Systemic hypertension" EXACT []
+is_a: HP:0032263 ! Increased blood pressure
+
+[Term]
+id: HP:0002615
+name: Hypotension
+def: "Low Blood Pressure, vascular hypotension." [https://orcid.org/0000-0002-0736-9199]
+synonym: "Arterial hypotension" EXACT []
+synonym: "Low blood pressure" EXACT layperson []
+is_a: HP:0030972 ! Abnormal systemic blood pressure
+
+[Term]
+id: HP:0000316
+name: Hypertelorism
+def: "Interpupillary distance more than 2 SD above the mean (alternatively, the appearance of an increased interpupillary distance or widely spaced eyes)." [PMID:19125427]
+synonym: "Excessive orbital separation" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Increased distance between eye sockets" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Increased distance between eyes" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Increased interpupillary distance" EXACT []
+synonym: "Ocular hypertelorism" EXACT []
+synonym: "Wide-set eyes" EXACT layperson []
+synonym: "Widely spaced eyes" EXACT layperson []
+synonym: "Widened interpupillary distance" EXACT []
+is_a: HP:0100886 ! Abnormality of globe location
+
+[Term]
+id: HP:0000601
+name: Hypotelorism
+def: "Interpupillary distance less than 2 SD below the mean (alternatively, the appearance of an decreased interpupillary distance or closely spaced eyes)." [https://orcid.org/0000-0002-0736-9199, PMID:19125427]
+synonym: "Abnormally close eyes" EXACT layperson [https://orcid.org/0000-0001-5889-4463]
+synonym: "Closely spaced eyes" EXACT layperson []
+synonym: "Decreased distance between eye sockets" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Decreased distance between eyes" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Decreased interpupillary distance" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Decreased orbital separation" EXACT [https://orcid.org/0000-0001-5889-4463]
+synonym: "Ocular hypotelorism" EXACT []
+is_a: HP:0100886 ! Abnormality of globe location
